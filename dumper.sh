@@ -1262,6 +1262,9 @@ find "$OUTDIR" -type f -printf '%P\n' | sort | grep -v ".git/" > "$OUTDIR"/all_f
 
 rm -rf "${TMPDIR}" 2>/dev/null
 
+#Grep Kernel Version #Please Forgive Me For This Poor Script I've Written Which Might Not even work with some other Architecture because of how specific the command is.
+KERNEL_VERSION=$(sed -n '3p' "${OUTDIR}"/bootRE/ikconfig | cut -c 15- | rev | cut -c 22- | rev)
+
 if [[ -s "${PROJECT_DIR}"/.github_token ]]; then
 	GITHUB_TOKEN=$(< "${PROJECT_DIR}"/.github_token)	# Write Your Github Token In a Text File
 	[[ -z "$(git config --get user.email)" ]] && git config user.email "guptasushrut@gmail.com"
@@ -1338,6 +1341,7 @@ if [[ -s "${PROJECT_DIR}"/.github_token ]]; then
 			printf "\n<b>Android Version:</b> %s" "${release}"
 			[ ! -z "${kernel_version}" ] && printf "\n<b>Kernel Version:</b> %s" "${kernel_version}"
 			printf "\n<b>Fingerprint:</b> %s" "${fingerprint}"
+			printf "\n<b>Kernel Version:</b> %s" "${KERNEL_VERSION}"
 			printf "\n<a href=\"https://github.com/%s/%s/tree/%s/\">Github Tree</a>" "${GIT_ORG}" "${repo}" "${branch}"
 			printf "\nDump Started By : <a href=\"tg://user?id=${USER_ID}\">${USER_FIRST_NAME}</a>"
 		} >> "${OUTDIR}"/tg.html
@@ -1469,6 +1473,7 @@ elif [[ -s "${PROJECT_DIR}"/.gitlab_token ]]; then
 			printf "\n<b>Android Version:</b> %s" "${release}"
 			[ ! -z "${kernel_version}" ] && printf "\n<b>Kernel Version:</b> %s" "${kernel_version}"
 			printf "\n<b>Fingerprint:</b> %s" "${fingerprint}"
+			printf "\n<b>Kernel Version:</b> %s" "${KERNEL_VERSION}"
 			printf "\n<a href=\"${GITLAB_HOST}/%s/%s/-/tree/%s/\">Gitlab Tree</a>" "${GIT_ORG}" "${repo}" "${branch}"
 			printf "\nDump Started By : <a href=\"tg://user?id=${USER_ID}\">${USER_FIRST_NAME}</a>"
 		} >> "${OUTDIR}"/tg.html
